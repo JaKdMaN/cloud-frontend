@@ -1,0 +1,26 @@
+// фикс появления скролбара при открытии модалок
+.q-body--force-scrollbar-y {
+  overflow-y: hidden !important;
+}
+
+// Лоадер
+.q-loading__backdrop {
+  background: rgba(white, .5);
+}
+
+// Тултип
+.q-tooltip {
+  padding: 5px 16px;
+  font-size: 14px;
+}
+
+// Уведомления
+.q-notification {
+  width: 410px;
+}
+
+// Чипса
+.q-chip {
+  color: $color-font-main;
+  margin: 0;
+}

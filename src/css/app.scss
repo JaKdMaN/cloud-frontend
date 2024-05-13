@@ -1,0 +1,60 @@
+// app global css in SCSS form
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  font-variant-numeric: normal;
+  font-feature-settings: 'pnum' on, 'lnum' on;
+  font-size: 10px;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.5rem;
+  color: $color-font-main;
+  background: #FFFFFF;
+  font-size: 1.6rem;
+  line-height: 2rem;
+}
+
+h1,h2,h3,h4,h5,h5 {
+  font-family: 'Nunito', sans-serif;
+}
+
+a,
+a:hover {
+  text-decoration: none !important;
+  outline: none !important;
+  color: unset;
+}
+
+button {
+  outline: none !important;
+}
+
+p {
+  margin: 0;
+}
+
+.row-pointer > .v-data-table__wrapper > table > tbody > tr:hover {
+  cursor: pointer;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}

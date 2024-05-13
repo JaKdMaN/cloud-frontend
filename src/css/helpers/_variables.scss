@@ -1,0 +1,35 @@
+// Внутренние переменные проекта.
+
+// FONT-COLORS
+$color-font-main: #343641;
+
+// COLORS
+$primary   : #007DFE;
+$secondary : #26A69A !default;
+$accent    : #004DA9 !default;
+
+$positive  : #21BA45 !default;
+$negative  : #C10015 !default;
+$info      : #31CCEC !default;
+$warning   : #F2C037 !default;
+
+// DURATIONS
+$duration-default: 300ms;
+$transition-default: $duration-default ease;
+
+// BORDER-RADIUS
+$border-radius-xs: 4px;
+$border-radius-sm: 8px;
+$border-radius-md: 12px;
+$border-radius-lg: 16px;
+$border-radius-xl: 20px;
+
+$border-radius-btn: 12px;
+
+// BUTTONS
+$base-button-width: 300px;
+$base-button-height: 66px;
+$base-button-icon-margin: 12px;
+
+// Z-INDEX
+$z-index-header: 2000 // такое значение задано по дефолту в quasar

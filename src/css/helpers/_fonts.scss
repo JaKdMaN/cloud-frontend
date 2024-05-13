@@ -1,0 +1,57 @@
+// ------------------------------- Montserrat ------------------------------- //
+
+@font-face {
+  font-family: 'Montserrat';
+  src:
+    url('src/assets/fonts/Montserrat/Bold/Montserrat_Bold.woff') format('woff'),
+    url('src/assets/fonts/Montserrat/Bold/Montserrat_Bold.ttf') format('ttf');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src:
+    url('src/assets/fonts/Montserrat/Medium/Montserrat_Medium.woff') format('woff'),
+    url('src/assets/fonts/Montserrat/Medium/Montserrat_Medium.ttf') format('ttf');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src:
+    url('src/assets/fonts/Montserrat/Regular/Montserrat_Regular.woff') format('woff'),
+    url('src/assets/fonts/Montserrat/Regular/Montserrat_Regular.ttf') format('ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+// -------------------------------- Nunito -------------------------------- //
+
+@font-face {
+  font-family: Nunito;
+  src:
+    url('src/assets/fonts/Nunito/Bold/Nunito_Bold.woff') format('woff'),
+    url('src/assets/fonts/Nunito/Bold/Nunito_Bold.ttf') format('ttf');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Nunito;
+  src:
+    url('src/assets/fonts/Nunito/Medium/Nunito_Medium.woff') format('woff'),
+    url('src/assets/fonts/Nunito/Medium/Nunito_Medium.ttf') format('ttf');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Nunito;
+  src:
+    url('src/assets/fonts/Nunito/Regular/Nunito_Regular.woff') format('woff'),
+    url('src/assets/fonts/Nunito/Regular/Nunito_Regular.ttf') format('ttf');
+  font-weight: 400;
+  font-style: normal;
+}

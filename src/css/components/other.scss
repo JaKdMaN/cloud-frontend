@@ -1,0 +1,12 @@
+.block {
+  display: block;
+}
+
+.break-word, .break-word * {
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.pointer {
+  cursor: pointer;
+}
