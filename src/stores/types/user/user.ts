@@ -8,7 +8,6 @@ export interface IUser {
   phone?: string
   dateOfbirth?: string
   gender?: UserGenderEnum
-  socialLinks?: string[]
   startPage?: UserStartPageEnum
   email: string
   password: string
@@ -19,7 +18,7 @@ export interface IUpdateUser {
   surname?: string
   phone?: string
   dateOfBirth?: string
-  gender?: string
-  startPage?: string
+  gender?: UserGenderEnum
+  startPage?: UserStartPageEnum
   email: string
 }

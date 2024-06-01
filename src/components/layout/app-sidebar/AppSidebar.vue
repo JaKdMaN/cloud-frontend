@@ -4,8 +4,12 @@
     <BaseButton
       class="mt-9 mb-10"
       label="Добавить"
-    />
+    >
+    <BaseActionMenu fit :menu="menu"/>
+  </BaseButton>
+
     <AppSidebarNav class="mb-8"/>
+
     <BaseProgress
       :used-size="5"
       :max-size="15"
@@ -15,12 +19,25 @@
 </template>
 
 <script setup lang="ts">
-  //Store
+  //Core
+  import { computed } from 'vue'
   import { storeToRefs } from 'pinia'
+
+  //Types
+  import { IBaseActionMenu } from 'src/components/_uikit/other/BaseActionMenu.vue'
+
+  //Store
   import { useUserStore } from 'src/stores/modules/user-store'
 
   const userStore = useUserStore()
   const { user } = storeToRefs(userStore)
+
+  const menu = computed((): IBaseActionMenu[] => {
+    return [
+      { title: 'Добавить файл', icon: 'mdi-file-document' },
+      { title: 'Добавить папку', icon: 'mdi-folder' },
+    ]
+  })
 
   const fetchData = () => {
     userStore.fetchUser()

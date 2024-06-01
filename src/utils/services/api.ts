@@ -3,8 +3,6 @@ import axios from 'axios'
 import qs from 'qs'
 import { baseURL } from './config.js'
 
-const requestSearchFieldBuffer: { [key: string]: string } = {}
-
 const createApi = () => {
   const systemStore = useSystemStore()
 
@@ -18,25 +16,14 @@ const createApi = () => {
   })
 
   api.interceptors.request.use((config) => {
-    const { url, params } = config
-    const search = (params && params.search) || ''
-
-    config.withCredentials = true
-
-    if (url) {
-      requestSearchFieldBuffer[url] = search
-    }
-
     if (!config.params || config.params && config.params.loading !== false) {
       systemStore.incrementLoadingCounter()
     }
 
-    if (sessionStorage.getItem('token')) {
+    if (localStorage.getItem('token')) {
       config.headers = config.headers ?? {}
-      config.headers['Authorization' as keyof HeadersInit] = 'Bearer ' + sessionStorage.getItem('token')
+      config.headers['Authorization' as keyof HeadersInit] = 'Bearer ' + localStorage.getItem('token')
     }
-
-    config.withCredentials = true
 
     config.baseURL = config.baseURL || baseURL
 
@@ -49,22 +36,12 @@ const createApi = () => {
   )
 
   api.interceptors.response.use((response) => {
-    const { url } = response.config,
-          { params } = response.config
-
-    const search = (params && params.search) || ''
-
-    if (response.data) {
-    }
+    const { params } = response.config
 
     systemStore.decrementLoadingCounter()
 
     if (!params || params.loading !== false) {
-      console.log('loading end')
-    }
-
-    if (url && requestSearchFieldBuffer[url] !== search) {
-      Promise.reject('late request')
+      systemStore.decrementLoadingCounter()
     }
 
     return response

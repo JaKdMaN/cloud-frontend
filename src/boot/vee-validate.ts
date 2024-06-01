@@ -3,7 +3,7 @@ import { localize } from '@vee-validate/i18n'
 import * as rules from '@vee-validate/rules'
 
 Object.keys(rules).forEach(rule => {
-  defineRule(rule, rules[rule])
+  defineRule(rule, (rules as any)[rule])
 })
 
 defineRule('phone', (value: any[], [limit]: [number]) => {

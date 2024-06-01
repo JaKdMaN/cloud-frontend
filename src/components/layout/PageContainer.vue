@@ -1,7 +1,16 @@
 <template>
   <div class="page-container">
     <div class="page-container__header">
-      <h2 v-if="title">{{ title }}</h2>
+      <div class="page-container__header-title">
+        <BaseBreadcrumbs
+          v-if="breadcrumbs"
+          :items="breadcrumbs"
+        />
+
+        <h2 v-if="title">
+          {{ title }}
+        </h2>
+      </div>
       <slot name="header"/>
     </div>
     <slot/>
@@ -9,9 +18,12 @@
 </template>
 
 <script setup lang="ts">
+  //Types
+  import { IBaseBreadcrumbsItem } from '../_uikit/other/BaseBreadCrumbs.vue'
 
   interface Props {
     title?: string
+    breadcrumbs?: IBaseBreadcrumbsItem[]
   }
 
   defineProps<Props>()
@@ -29,6 +41,16 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+
+      &-title {
+        display: flex;
+        align-items: center;
+        column-gap: 6px;
+
+        font-size: 3rem;
+        font-weight: 700;
+        font-family: 'Nunito', sans-serif;
+      }
     }
   }
 </style>
