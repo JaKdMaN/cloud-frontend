@@ -4,7 +4,7 @@ const diskRoutes: RouteRecordRaw[] = [
   {
     name: 'disk',
     path: '/disk',
-    redirect: { name: 'disk.files' },
+    redirect: { name: 'disk.storage' },
     component: () => import('pages/disk/DiskPage.vue'),
     children: [
       {
@@ -13,9 +13,22 @@ const diskRoutes: RouteRecordRaw[] = [
         component: () => import('pages/disk/children/recent/DiskRecent.vue'),
       },
       {
-        name: 'disk.files',
-        path: 'files',
-        component: () => import('pages/disk/children/files/DiskFiles.vue'),
+        name: 'disk.storage',
+        path: 'storage',
+        redirect: { name: 'disk.storage.all' },
+        component: () => import('pages/disk/children/storage/DiskStorage.vue'),
+        children: [
+          {
+            name: 'disk.storage.all',
+            path: '',
+            component: () => import('pages/disk/children/storage/children/all/DiskStorageAll.vue'),
+          },
+          {
+            name: 'disk.storage.folder',
+            path: 'folder/:folderId',
+            component: () => import('pages/disk/children/storage/children/folder/DiskStorageFolder.vue'),
+          },
+        ],
       },
       {
         name: 'disk.shared',

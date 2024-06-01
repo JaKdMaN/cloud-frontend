@@ -36,10 +36,10 @@
 
         <div class="profile-edit-form__fields-item-field">
           <p class="text-bold">Пол</p>
-          <BaseInputWithValidation
+          <BaseSelectWithValidation
             dense
             name="gender"
-            placeholder="Укажите пол"
+            :options="genderOptions"
           />
         </div>
       </div>
@@ -88,10 +88,11 @@
   import { FormValidationResult, useForm } from 'vee-validate'
 
   //Types
-  import { IUpdateUser, IUser } from 'src/stores/types/user'
+  import { IUpdateUser, IUser, UserGenderEnum, UserStartPageEnum } from 'src/stores/types/user'
 
   //Utils
-  import { startPageOptions } from '../model/start-page-options'
+  import { getOptionsFromDictionary } from 'src/utils/functions/get-options-from-dictionary'
+  import { userGenderNames, userStartPageNames } from 'src/utils/dictionaries'
 
   interface Props {
     user: IUser
@@ -105,15 +106,18 @@
 
   const props = defineProps<Props>()
 
+  const startPageOptions = ref(getOptionsFromDictionary(userStartPageNames))
+  const genderOptions = ref(getOptionsFromDictionary(userGenderNames))
+
   const { values: form, validate: validateForm, resetForm } = useForm<IUpdateUser>({
     initialValues: {
       name: props.user.name ?? '',
       surname: props.user.surname ?? '',
       dateOfBirth: props.user.dateOfbirth ?? '',
-      gender: props.user.gender ?? '',
+      gender: props.user.gender ?? ('' as UserGenderEnum),
       phone: props.user.phone ?? '',
       email: props.user.email ?? '',
-      startPage: props.user.startPage ?? '',
+      startPage: props.user.startPage ?? ('' as UserStartPageEnum),
     },
     validationSchema: {
       email: 'required|email',

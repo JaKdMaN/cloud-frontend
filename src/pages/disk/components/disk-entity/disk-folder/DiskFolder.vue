@@ -1,5 +1,10 @@
 <template>
-  <div class="disk-folder">
+  <div
+    class="disk-folder"
+    @click.right.prevent=""
+    @click.left="goToFolder"
+    ref="div"
+  >
     <div class="disk-folder__header">
       <div class="disk-folder__header-title">
         <q-icon
@@ -9,6 +14,12 @@
         />
         <p class="disk-folder__header-title-text">Природа</p>
       </div>
+
+      <BaseButtonWithActionMenu
+        width="250px"
+        :menu="diskFolderMenu"
+      />
+
     </div>
     <div class="disk-folder__icon">
       <q-icon
@@ -20,10 +31,30 @@
     <p class="disk-folder__created-at">
       Была создана 24 мая 2023 г.
     </p>
+
+    <BaseActionMenu
+      context-menu
+      touch-position
+      :menu="diskFolderMenu"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
+  //Core
+  import { useRouter } from 'vue-router'
+
+  //Utils
+  import { diskFolderMenu } from './model/disk-folder-menu'
+
+  const router = useRouter()
+
+  const goToFolder = () => {
+    router.push({
+      name: 'disk.storage.folder',
+      params: { folderId: 1 },
+    })
+  }
 
 </script>
 
@@ -35,7 +66,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 12px 20px;
+    padding: 12px 15px;
     border: 1px solid #EAEAEA;
     border-radius: $border-radius-md;
     transition: all .3s ease ;

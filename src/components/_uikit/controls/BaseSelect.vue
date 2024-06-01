@@ -6,6 +6,7 @@
     :error="!!errorMessage"
     :option-label="optionLabel"
     :options="_options"
+    :label="label"
     clear-icon="mdi-close"
     :emit-value="emitValue"
     map-options
@@ -46,6 +47,7 @@
   export interface IBaseSelectProps {
     modelValue?: ValueType,
     value?: ValueType,
+    label?: string
     emitValue: boolean
     errorMessage?: string
     options: OptionType[]

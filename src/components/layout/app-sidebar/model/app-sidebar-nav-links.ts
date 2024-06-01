@@ -7,9 +7,9 @@ export const links: ILink[] = [
     icon: 'mdi-clock-time-eight',
   },
   {
-    name: 'Файлы',
-    path: { name: 'disk.files' },
-    icon: 'mdi-file-document',
+    name: 'Хранилище',
+    path: { name: 'disk.storage' },
+    icon: 'mdi-cloud',
   },
   {
     name: 'Общий доступ',
