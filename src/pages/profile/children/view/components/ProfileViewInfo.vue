@@ -1,7 +1,11 @@
 <template>
   <div class="profile-view-info">
     <div class="profile-view-info__avatar">
-      <img :src="user.avatar"/>
+      <img
+        v-if="user.avatar"
+        :src="user.avatar.url"
+      />
+      <BaseProfileAvatar v-else/>
     </div>
     <div class="profile-view-info__blocks">
       <ProfileViewInfoBlock
@@ -35,12 +39,12 @@
     column-gap: 48px;
 
     &__avatar {
-      width: 200px;
-      object-fit: cover;
+      width: 300px;
+      height: 350px;
 
       img {
-        max-width: 100%;
-        max-height: 100%;
+        width: 100%;
+        height: 100%;
         object-fit: cover;
         border-radius: $border-radius-md;
       }

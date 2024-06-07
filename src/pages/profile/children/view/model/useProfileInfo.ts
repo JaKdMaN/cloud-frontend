@@ -15,7 +15,7 @@ export const useProfileInfo = (user: IUser) => {
         fields: [
           { name: 'Имя', value: user.name ?? '' },
           { name: 'Фамилия', value: user.surname ?? '' },
-          { name: 'Дата рождения', value: user.dateOfbirth ?? '' },
+          { name: 'Дата рождения', value: user.dateOfBirth ?? '' },
           { name: 'Пол', value:  userGender },
         ],
 

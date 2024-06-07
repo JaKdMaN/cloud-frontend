@@ -3,6 +3,7 @@ import { DiskAccessTypesEnum } from './disk-access-type'
 import { DiskFileTypesEnum } from './disk-file-type'
 
 export interface DiskFile {
+  id: number
   type: 'file'
   fileType: DiskFileTypesEnum
   fileName: string

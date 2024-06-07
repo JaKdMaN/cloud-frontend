@@ -12,7 +12,6 @@
   //Types
   import { ILink } from 'src/stores/types/link'
 
-
   interface Props {
     link: ILink
   }

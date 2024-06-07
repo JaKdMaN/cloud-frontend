@@ -3,8 +3,12 @@
     <AppLogo width="87px"/>
     <FormCard title="Регистрация">
 
-      <BaseInputWithValidation name="email" label="Email"/>
-      <PasswordInput/>
+      <BaseInputWithValidation
+        name="email"
+        label="Email"
+        @keyup.enter="registration"
+      />
+      <PasswordInput @keyup.enter="registration"/>
 
       <template #actions>
         <BaseButton
@@ -26,29 +30,31 @@
 
 <script setup lang="ts">
   //Core
-  import { computed } from 'vue'
   import { useRouter } from 'vue-router'
   import { useForm } from 'vee-validate'
 
-  const router = useRouter()
+  //Types
+  import { IRegistrationBody } from 'src/stores/types/auth'
 
-  const initialValues = computed(() => {
-    return {
+  //Store
+  import { useAuthStore } from 'src/stores/modules/auth.store'
+
+  //Hooks
+  import useNotify from 'src/utils/hooks/useNotify'
+
+  const router = useRouter()
+  const { notifyError, notifySuccess } = useNotify()
+  const authStore = useAuthStore()
+
+  const { values: form, validate } = useForm<IRegistrationBody>({
+    initialValues: {
       email: '',
       password: '',
-    }
-  })
-
-  const validationSchema = computed(() => {
-    return {
+    },
+    validationSchema: {
       email: 'required|email',
       password: 'required',
-    }
-  })
-
-  const { values: form, validate } = useForm({
-    initialValues,
-    validationSchema,
+    },
   })
 
   const goToLogin = () => {
@@ -59,7 +65,13 @@
     const { valid } = await validate()
 
     if (valid) {
-      console.log(form)
+      try {
+        await authStore.registration(form)
+        notifySuccess('Вы успешно зарегистрировались')
+        router.push({ name: 'profile' })
+      } catch (error: any) {
+        notifyError(error)
+      }
     }
   }
 

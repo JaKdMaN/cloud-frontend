@@ -4,10 +4,27 @@
     :to="{ name: 'profile' }"
     class="app-sidebar-user"
   >
-      <img :src="user.avatar" class="app-sidebar-user__avatar"/>
+    <div class="app-sidebar-user__avatar">
+      <img
+        v-if="user.avatar"
+        :src="user.avatar.url"
+      />
+      <div
+        v-else
+        class="app-sidebar-user__avatar-base"
+      >
+        <q-icon
+          name="mdi-account"
+          size="20px"
+        />
+      </div>
+    </div>
     <div class="app-sidebar-user__info">
-      <p class="app-sidebar-user__info-name">
-        {{ fullName }}
+      <p
+        v-if="user.name || user.surname"
+        class="app-sidebar-user__info-name"
+      >
+        {{ `${user.name} ${user.surname}` }}
       </p>
       <p class="app-sidebar-user__info-email">
         {{ user.email }}
@@ -17,24 +34,15 @@
 </template>
 
 <script setup lang="ts">
-  //Core
-  import { computed } from 'vue'
-
   //Types
   import { IUser } from 'src/stores/types/user'
-  import { getFullName } from 'src/utils/functions'
 
   interface Props {
     user: IUser | null
   }
 
-  const props = defineProps<Props>()
+  defineProps<Props>()
 
-  const fullName = computed((): string => {
-    const user = props.user
-
-    return user ? getFullName(user) : ''
-  })
 </script>
 
 <style scoped lang="scss">
@@ -52,8 +60,24 @@
     &__avatar {
       width: 45px;
       height: 45px;
-      border-radius: 50%;
-      object-fit: cover;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      &-base {
+        width: 100%;
+        height: 100%;
+        background: #EAEAEA;
+        border-radius: 50%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
 
     &__info {

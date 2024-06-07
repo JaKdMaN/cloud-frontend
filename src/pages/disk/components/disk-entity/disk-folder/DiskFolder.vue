@@ -2,7 +2,7 @@
   <div
     class="disk-folder"
     @click.right.prevent=""
-    @click.left="goToFolder"
+    @dblclick.left="goToFolder"
     ref="div"
   >
     <div class="disk-folder__header">
@@ -61,6 +61,7 @@
 <style scoped lang="scss">
   .disk-folder {
     cursor: pointer;
+    user-select: none;
     width: 250px;
     height: 200px;
     display: flex;

@@ -1,11 +1,17 @@
 <template>
   <div class="app-sidebar">
     <AppSidebarUser :user="user"/>
+
     <BaseButton
       class="mt-9 mb-10"
       label="Добавить"
     >
-    <BaseActionMenu fit :menu="menu"/>
+      <BaseActionMenu fit :menu="menu">
+        <BaseFileUpload
+          title="Добавить файл"
+          icon="mdi-file-document"
+        />
+      </BaseActionMenu>
   </BaseButton>
 
     <AppSidebarNav class="mb-8"/>
@@ -24,26 +30,19 @@
   import { storeToRefs } from 'pinia'
 
   //Types
-  import { IBaseActionMenu } from 'src/components/_uikit/other/BaseActionMenu.vue'
+  import { IBaseActionListItem } from 'src/components/_uikit/other/BaseActionList.vue'
 
   //Store
-  import { useUserStore } from 'src/stores/modules/user-store'
+  import { useUserStore } from 'src/stores/modules/user.store'
 
   const userStore = useUserStore()
   const { user } = storeToRefs(userStore)
 
-  const menu = computed((): IBaseActionMenu[] => {
+  const menu = computed((): IBaseActionListItem[] => {
     return [
-      { title: 'Добавить файл', icon: 'mdi-file-document' },
       { title: 'Добавить папку', icon: 'mdi-folder' },
     ]
   })
-
-  const fetchData = () => {
-    userStore.fetchUser()
-  }
-
-  fetchData()
 </script>
 
 <style scoped lang="scss">

@@ -20,6 +20,8 @@ const createApi = () => {
       systemStore.incrementLoadingCounter()
     }
 
+    config.withCredentials = true
+
     if (localStorage.getItem('token')) {
       config.headers = config.headers ?? {}
       config.headers['Authorization' as keyof HeadersInit] = 'Bearer ' + localStorage.getItem('token')

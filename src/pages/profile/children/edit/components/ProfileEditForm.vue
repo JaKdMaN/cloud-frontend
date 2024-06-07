@@ -1,7 +1,29 @@
 <template>
   <div class="profile-edit-form">
     <div class="profile-edit-form__avatar">
-      <img :src="user.avatar"/>
+      <img
+        v-if="profileAvatar.length"
+        :src="profileAvatar[0].url"
+      />
+      <BaseProfileAvatar v-else />
+
+      <BaseActionMenu
+        width="300px"
+        :auto-close="false"
+        touch-position
+        v-model="isMenuShowed"
+        :menu="user.avatar && menu"
+      >
+        <BaseFileUpload
+          title="Загрузить новое изображение"
+          icon="mdi-upload"
+          accept="image/*"
+          :max-files="1"
+          v-model:files="profileAvatar"
+          v-model:file-ids="profileAvatarId"
+          @update:files="handleUpdateAvatar"
+        />
+      </BaseActionMenu>
     </div>
     <div class="profile-edit-form__fields">
       <div class="profile-edit-form__fields-item">
@@ -39,6 +61,7 @@
           <BaseSelectWithValidation
             dense
             name="gender"
+            no-option-text="Ничего"
             :options="genderOptions"
           />
         </div>
@@ -74,6 +97,7 @@
           <BaseSelectWithValidation
             dense
             name="startPage"
+            no-option-text="Ничего"
             :options="startPageOptions"
           />
         </div>
@@ -84,15 +108,17 @@
 
 <script setup lang="ts">
   //Core
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
   import { FormValidationResult, useForm } from 'vee-validate'
 
   //Types
-  import { IUpdateUser, IUser, UserGenderEnum, UserStartPageEnum } from 'src/stores/types/user'
+  import { IUpdateUserBody, IUser } from 'src/stores/types/user'
+  import { IBaseActionListItem } from 'src/components/_uikit/other/BaseActionList.vue'
 
   //Utils
   import { getOptionsFromDictionary } from 'src/utils/functions/get-options-from-dictionary'
   import { userGenderNames, userStartPageNames } from 'src/utils/dictionaries'
+  import { DiskFile } from 'src/stores/types/disk'
 
   interface Props {
     user: IUser
@@ -100,8 +126,8 @@
 
   interface Expose {
     reset: () => void,
-    validate: () => Promise<FormValidationResult<IUpdateUser>>,
-    getValue: () => IUpdateUser
+    validate: () => Promise<FormValidationResult<IUpdateUserBody>>,
+    getValue: () => IUpdateUserBody
   }
 
   const props = defineProps<Props>()
@@ -109,23 +135,47 @@
   const startPageOptions = ref(getOptionsFromDictionary(userStartPageNames))
   const genderOptions = ref(getOptionsFromDictionary(userGenderNames))
 
-  const { values: form, validate: validateForm, resetForm } = useForm<IUpdateUser>({
+  const isMenuShowed = ref(false)
+
+  const profileAvatar = ref<DiskFile[]>(props.user.avatar ? [ props.user.avatar ] : [])
+  const profileAvatarId = ref<number[]>(props.user.avatar ? [ props.user.avatar.id ] : [])
+
+  const menu = computed((): IBaseActionListItem[] => {
+    return [
+      { title: 'Удалить изображение', icon: 'mdi-trash-can', iconColor: 'negative' },
+    ]
+  })
+
+  const { values: form, validate: validateForm, resetForm } = useForm<IUpdateUserBody>({
     initialValues: {
-      name: props.user.name ?? '',
-      surname: props.user.surname ?? '',
-      dateOfBirth: props.user.dateOfbirth ?? '',
-      gender: props.user.gender ?? ('' as UserGenderEnum),
-      phone: props.user.phone ?? '',
-      email: props.user.email ?? '',
-      startPage: props.user.startPage ?? ('' as UserStartPageEnum),
+      name: props.user.name,
+      surname: props.user.surname,
+      avatarId: profileAvatarId.value[0],
+      dateOfBirth: props.user.dateOfBirth,
+      gender: props.user.gender,
+      phone: props.user.phone,
+      email: props.user.email,
+      startPage: props.user.startPage,
     },
     validationSchema: {
       email: 'required|email',
     },
   })
 
-  const validate = (): Promise<FormValidationResult<IUpdateUser>> => validateForm()
-  const getValue = (): IUpdateUser => form
+  const handleUpdateAvatar = (files: DiskFile[]) => {
+    profileAvatar.value = files
+    profileAvatarId.value = files.map(f => f.id)
+
+    isMenuShowed.value = false
+  }
+
+  const validate = (): Promise<FormValidationResult<IUpdateUserBody>> => validateForm()
+  const getValue = (): IUpdateUserBody => {
+    return {
+      ...form,
+      avatarId: profileAvatarId.value[0],
+    }
+  }
   const reset = (): void => resetForm()
 
   defineExpose<Expose>({
@@ -141,12 +191,33 @@
     column-gap: 48px;
 
     &__avatar {
-      width: 200px;
-      object-fit: cover;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+      width: 300px;
+      height: 350px;
+
+      &:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        border-radius: $border-radius-md;
+        transition: all $transition-default;
+      }
+
+      &:hover{
+        &:before {
+          background: rgba(#343641, 0.6);
+        }
+      }
 
       img {
-        max-width: 100%;
-        max-height: 100%;
+        width: 100%;
+        height: 100%;
         object-fit: cover;
         border-radius: $border-radius-md;
       }

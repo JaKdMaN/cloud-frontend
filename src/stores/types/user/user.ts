@@ -1,22 +1,28 @@
+import { DiskFile } from '../disk'
 import { UserGenderEnum } from './user-gender'
 import { UserStartPageEnum } from './user-start-page'
 
 export interface IUser {
   name?: string
   surname?: string
-  avatar?: string
+  avatar?: DiskFile
   phone?: string
-  dateOfbirth?: string
+  dateOfBirth?: string
   gender?: UserGenderEnum
   startPage?: UserStartPageEnum
   email: string
-  password: string
 }
 
-export interface IUpdateUser {
+export interface IUserWithToken {
+  user: IUser,
+  token: string
+}
+
+export interface IUpdateUserBody {
   name?: string
   surname?: string
   phone?: string
+  avatarId?: number
   dateOfBirth?: string
   gender?: UserGenderEnum
   startPage?: UserStartPageEnum

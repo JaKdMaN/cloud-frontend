@@ -1,56 +1,40 @@
 <template>
   <q-menu
-    auto-close
+    :auto-close="autoClose"
     :fit="fit"
+    transition-show="jump-down"
+    transition-hide="jump-up"
+    :persistent="persistent"
     :touch-position="touchPosition"
     :context-menu="contextMenu"
-    class="base-action-menu"
     :style="{ width: width }"
+    class="base-action-menu"
     @update:model-value="handleUpdateValue"
   >
-    <q-list class="base-action-menu__list">
-      <q-item
-        v-for="(item, index) in menu"
-        :key="index"
-        :to="item.to"
-        v-ripple
-        clickable
-        class="base-action-menu__list-item"
-        @click="handleClickAction(item)"
-      >
-        <q-item-section v-if="item.icon" avatar class="base-action-menu__list-item-icon">
-          <q-icon :name="item.icon"/>
-        </q-item-section>
+    <slot />
 
-        <q-item-section>
-          {{ item.title }}
-        </q-item-section>
-
-      </q-item>
-    </q-list>
+    <BaseActionList
+      v-if="menu"
+      :list="menu"
+    />
   </q-menu>
 </template>
 
 <script setup lang="ts">
   //Types
   import { QMenuProps } from 'quasar'
-  import { RouteLocationRaw } from 'vue-router'
-
-  export interface IBaseActionMenu {
-    title: string
-    to?: RouteLocationRaw
-    icon?: string
-    callback?: () => void
-  }
+  import { IBaseActionListItem } from './BaseActionList.vue'
 
   interface Props {
     width?: string
+    autoClose?: boolean
     anchor?: QMenuProps['anchor']
     self?: QMenuProps['self']
     fit?: boolean
+    persistent?: boolean
     touchPosition?: boolean
     contextMenu?: boolean
-    menu: IBaseActionMenu[]
+    menu?: IBaseActionListItem[]
   }
 
   interface Emits {
@@ -58,6 +42,7 @@
   }
 
   withDefaults(defineProps<Props>(), {
+    autoClose: true,
     anchor: 'bottom middle',
     self: 'top middle',
   })
@@ -67,40 +52,7 @@
   const handleUpdateValue = (value: boolean) => {
     emit('update:modelValue', value)
   }
-
-  const handleClickAction = (item: IBaseActionMenu) => {
-    const { callback } = item
-
-    callback && callback()
-  }
 </script>
 
 <style scoped lang="scss">
-  .base-action-menu {
-
-    &__list {
-      min-width: 210px;
-      display: flex;
-      flex-direction: column;
-      padding: 0;
-      border-radius: 6px;
-
-      &-item {
-        display: grid;
-        grid-template-columns: 20px 1fr;
-        column-gap: 10px;
-
-        min-height: 20px;
-        padding: 8px 16px;
-
-        font-size: 1.4rem;
-        font-weight: 500;
-
-        &-icon {
-          max-width: 20px;
-          padding: 0;
-        }
-      }
-    }
-  }
 </style>
