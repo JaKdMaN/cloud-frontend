@@ -29,7 +29,7 @@
   import { FileRejectReason, useDropzone } from 'vue3-dropzone'
 
   //Types
-  import { DiskFile } from 'src/stores/types/disk'
+  import { IFile } from 'src/stores/types/file'
   import { AxiosHeaders } from 'axios'
 
   //Hooks
@@ -54,15 +54,15 @@
   interface Props {
     title: string
     icon?: string
-    files: DiskFile[]
+    files: IFile[]
     fileIds: number[]
     accept?: string
     disabled?: boolean
-    maxFiles: number
+    maxFiles?: number
   }
 
   interface Emits {
-    (e: 'update:files', value: DiskFile[]): void
+    (e: 'update:files', value: IFile[]): void
     (e: 'update:fileIds', value: number[]): void
   }
 
@@ -132,7 +132,7 @@
     }
   }
 
-  const updateData = (file: DiskFile) => {
+  const updateData = (file: IFile) => {
     if (file) {
       const files = isSingleMode.value ? [ file ] : [ ...props.files, file ]
       const fileIds = files.map(f => f.id)
@@ -180,7 +180,7 @@
         },
       })
 
-      return data as DiskFile
+      return data as IFile
     } catch (error: any) {
       if (error.message === 'canceled')
         notifyError('Загрузка файлов прервана')

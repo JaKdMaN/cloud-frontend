@@ -1,11 +1,11 @@
-import { DiskFile } from '../disk'
+import { IFile } from '../file'
 import { UserGenderEnum } from './user-gender'
 import { UserStartPageEnum } from './user-start-page'
 
 export interface IUser {
   name?: string
   surname?: string
-  avatar?: DiskFile
+  avatar?: IFile
   phone?: string
   dateOfBirth?: string
   gender?: UserGenderEnum

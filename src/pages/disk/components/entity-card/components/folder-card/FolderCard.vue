@@ -3,7 +3,6 @@
     class="disk-folder"
     @click.right.prevent=""
     @dblclick.left="goToFolder"
-    ref="div"
   >
     <div class="disk-folder__header">
       <div class="disk-folder__header-title">
@@ -12,7 +11,7 @@
           size="15px"
           color="primary"
         />
-        <p class="disk-folder__header-title-text">Природа</p>
+        <p class="disk-folder__header-title-text">{{ folder.name }}</p>
       </div>
 
       <BaseButtonWithActionMenu
@@ -29,7 +28,7 @@
       />
     </div>
     <p class="disk-folder__created-at">
-      Была создана 24 мая 2023 г.
+      {{ `Была создана ${ formatedDate }.` }}
     </p>
 
     <BaseActionMenu
@@ -42,17 +41,37 @@
 
 <script setup lang="ts">
   //Core
+  import { computed } from 'vue'
   import { useRouter } from 'vue-router'
 
+  //Types
+  import { IFolder } from 'src/stores/types/folder'
+
   //Utils
+  import { format } from 'date-fns'
+  import { ru } from 'date-fns/locale'
   import { diskFolderMenu } from './model/disk-folder-menu'
+
+  interface Props {
+    folder: IFolder
+  }
+
+  const props = defineProps<Props>()
 
   const router = useRouter()
 
+  const formatedDate = computed(() => {
+    const { createdAt } = props.folder
+
+    return format(createdAt, 'dd MMM yyyy', { locale: ru })
+  })
+
   const goToFolder = () => {
+    const { id } = props.folder
+
     router.push({
       name: 'disk.storage.folder',
-      params: { folderId: 1 },
+      params: { folderId: id },
     })
   }
 

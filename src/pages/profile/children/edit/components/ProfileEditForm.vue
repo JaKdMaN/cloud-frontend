@@ -41,10 +41,10 @@
         <div class="profile-edit-form__fields-item-field">
           <p class="text-bold">Фамилия</p>
           <BaseInputWithValidation
-          dense
-          name="surname"
-          placeholder="Укажите фамилию"
-        />
+            dense
+            name="surname"
+            placeholder="Укажите фамилию"
+          />
         </div>
 
         <div class="profile-edit-form__fields-item-field">
@@ -118,7 +118,7 @@
   //Utils
   import { getOptionsFromDictionary } from 'src/utils/functions/get-options-from-dictionary'
   import { userGenderNames, userStartPageNames } from 'src/utils/dictionaries'
-  import { DiskFile } from 'src/stores/types/disk'
+  import { IFile } from 'src/stores/types/file'
 
   interface Props {
     user: IUser
@@ -137,7 +137,7 @@
 
   const isMenuShowed = ref(false)
 
-  const profileAvatar = ref<DiskFile[]>(props.user.avatar ? [ props.user.avatar ] : [])
+  const profileAvatar = ref<IFile[]>(props.user.avatar ? [ props.user.avatar ] : [])
   const profileAvatarId = ref<number[]>(props.user.avatar ? [ props.user.avatar.id ] : [])
 
   const menu = computed((): IBaseActionListItem[] => {
@@ -162,7 +162,7 @@
     },
   })
 
-  const handleUpdateAvatar = (files: DiskFile[]) => {
+  const handleUpdateAvatar = (files: IFile[]) => {
     profileAvatar.value = files
     profileAvatarId.value = files.map(f => f.id)
 
