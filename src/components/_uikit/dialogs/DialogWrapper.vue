@@ -11,7 +11,7 @@
       :style="wrapperStyle"
     >
       <div class="modal-wrapper__header mb-9">
-        <div class="modal-wrapper__header-wrapper text-h2">
+        <div class="modal-wrapper__header-wrapper text-h3">
           <span>{{ title }}</span>
 
           <div
@@ -116,7 +116,7 @@
   .modal-wrapper {
     display: flex;
     flex-direction: column;
-    padding: 24px 24px 32px 24px;
+    padding: 32px 32px 36px 32px;
     width: 100%;
     overflow: hidden !important;
     border-radius: $border-radius-xl;

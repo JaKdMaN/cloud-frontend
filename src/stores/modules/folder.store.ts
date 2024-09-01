@@ -1,50 +1,51 @@
 //Core
-import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 //Types
 import {
-  IFolder,
-  IAddEntitiesFolder,
   ICreateFolderBody,
-  IUpdateFolderBody,
 } from '../types/folder'
 
 //Utils
 import { api } from 'src/boot/axios'
+import { IDiskEntity, IDiskEntityShort } from '../types/disk-entity'
 
 export const useFolderStore = defineStore('folder-store', () => {
-  const folder = ref<IFolder | null>(null)
+  const folderEntity = ref<IDiskEntity | null>(null)
+  const folderContent = ref<IDiskEntity[]>([])
+  const folderParents = ref<IDiskEntityShort[]>([])
 
-  const createFolder = async (body: ICreateFolderBody) => {
-    const { data } = await api<IFolder>('/folders/create', { data: body, method: 'POST' })
+  const addFolder = async (parentFolderId: number, body: ICreateFolderBody) => {
+    const { data } = await api<IDiskEntity>(`/folders/${parentFolderId}/add-folder`, { data: body, method: 'POST' })
 
-    folder.value = data
+    folderEntity.value = data
 
     return data
   }
 
-  const updateFolder = async (folderId: number, body: IUpdateFolderBody) => {
-    const { data } = await api<IFolder>(`folders/${folderId}`, { data: body, method: 'POST' })
+  const fetchFolderContent = async (folderId: number) => {
+    const { data } = await api<IDiskEntity[]>(`/folders/${folderId}/content`)
 
-    folder.value = data
+    folderContent.value = data
 
-    return folder
+    return data
   }
 
-  const addEntities = async (folderId: number, body: IAddEntitiesFolder) => {
-    await api<void>(`folders/${folderId}`, { data: body, method: 'PUT' })
-  }
+  const fetchFolderParentsPath = async (folderId: number) => {
+    const { data } = await api<IDiskEntityShort[]>(`/folders/${folderId}/parents`)
 
-  const deleteFolder = async (folderId: number) => {
-    await api<void>(`folders/${folderId}`)
+    folderParents.value = data
+
+    return data
   }
 
   return {
-    folder,
-    createFolder,
-    updateFolder,
-    addEntities,
-    deleteFolder,
+    folderEntity,
+    folderContent,
+    folderParents,
+    addFolder,
+    fetchFolderContent,
+    fetchFolderParentsPath,
   }
 })

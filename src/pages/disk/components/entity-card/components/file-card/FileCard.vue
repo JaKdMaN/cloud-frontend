@@ -10,7 +10,7 @@
           size="15px"
           color="primary"
         />
-        <p class="file-card__header-title-text">{{ file.originalName }}</p>
+        <p class="file-card__header-title-text">{{ file.fileName }}</p>
       </div>
 
       <BaseButtonWithActionMenu
@@ -27,7 +27,7 @@
       />
     </div>
     <p class="file-card__created-at">
-      {{ `Была создана ${ formatedDate }.` }}
+      {{ `Был создан ${ formatedDate }.` }}
     </p>
 
     <BaseActionMenu
@@ -44,6 +44,7 @@
 
   //Types
   import { IFile } from 'src/stores/types/file'
+  import { IDiskEntity } from 'src/stores/types/disk-entity'
   import { IBaseActionListItem } from 'src/components/_uikit/other/BaseActionList.vue'
 
   //Utils
@@ -51,10 +52,20 @@
   import { ru } from 'date-fns/locale'
 
   interface Props {
-    file: IFile
+    fileEntity: IDiskEntity
   }
 
   const props = defineProps<Props>()
+
+  const file = computed(() => {
+    return props.fileEntity.entity as IFile
+  })
+
+  const formatedDate = computed(() => {
+    const { createdAt } = file.value
+
+    return format(createdAt, 'dd MMM yyyy', { locale: ru })
+  })
 
   const fileCardMenu = computed((): IBaseActionListItem[] => {
     return [
@@ -64,14 +75,8 @@
       { title: 'Поделиться', icon: 'mdi-share' },
       { title: 'Добавить в папку', icon: 'mdi-folder' },
       { title: 'Добавить в избранное', icon: 'mdi-star' },
-      { title: 'Добавить в корзину', icon: 'mdi-trash-can' },
+      // { title: 'Добавить в корзину', icon: 'mdi-trash-can', callback: handleDeleteFile },
     ]
-  })
-
-  const formatedDate = computed(() => {
-    const { createdAt } = props.file
-
-    return format(createdAt, 'dd MMM yyyy', { locale: ru })
   })
 
 </script>

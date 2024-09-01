@@ -3,24 +3,26 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 //Types
-import { IStorageEntity } from '../types/storage'
+import { IDiskEntity } from '../types/disk-entity'
+import { ICreateFolderBody } from '../types/folder'
 
 //Utils
 import { api } from 'src/boot/axios'
 
 export const useStorageStore = defineStore('storage-store', () => {
-  const storage = ref<IStorageEntity[] | null>(null)
+  const storage = ref<IDiskEntity[] | null>(null)
+  const storageEntity = ref<IDiskEntity | null>(null)
 
-  const fetchStorage = async () => {
-    const { data } = await api<IStorageEntity[]>('/storage', { method: 'GET' })
+  const addFolder = async (body: ICreateFolderBody) => {
+    const { data } = await api<IDiskEntity>('storage/add-folder', { data: body, method: 'POST' })
 
-    storage.value = data
+    storageEntity.value = data
 
     return data
   }
 
-  const fetchFolderStorage = async (folderId: number) => {
-    const { data } = await api<IStorageEntity[]>(`/storage/${folderId}`)
+  const fetchStorage = async () => {
+    const { data } = await api<IDiskEntity[]>('/storage', { method: 'GET' })
 
     storage.value = data
 
@@ -28,8 +30,9 @@ export const useStorageStore = defineStore('storage-store', () => {
   }
 
   return {
+    storageEntity,
     storage,
+    addFolder,
     fetchStorage,
-    fetchFolderStorage,
   }
 })

@@ -15,6 +15,7 @@
         <BaseFileUpload
           title="Добавить файл"
           icon="mdi-file-document"
+          :url="url"
           v-model:files="files"
           v-model:file-ids="fileIds"
           @update:files="handleAddFile"
@@ -41,26 +42,36 @@
 <script setup lang="ts">
   //Core
   import { ref, computed } from 'vue'
+  import { useRoute } from 'vue-router'
   import { storeToRefs } from 'pinia'
 
   //Types
-  import { IBaseActionListItem } from 'src/components/_uikit/other/BaseActionList.vue'
   import { IFile } from 'src/stores/types/file'
+  import { IDiskEntity } from 'src/stores/types/disk-entity'
+  import { ICreateFolderBody } from 'src/stores/types/folder'
+  import { IBaseActionListItem } from 'src/components/_uikit/other/BaseActionList.vue'
 
   //Hooks
   import useNotify from 'src/utils/hooks/useNotify'
 
   //Store
   import { useUserStore } from 'src/stores/modules/user.store'
-  import { useFolderStore } from 'src/stores/modules/folder.store'
   import { useStorageStore } from 'src/stores/modules/storage.store'
+  import { useFolderStore } from 'src/stores/modules/folder.store'
 
+  //Utils
+  import { baseURL } from 'src/utils/services/config'
+
+  const route = useRoute()
   const { notifyError, notifySuccess } = useNotify()
 
   const userStore = useUserStore()
-  const folderStore = useFolderStore()
   const storageStore = useStorageStore()
+  const folderStore = useFolderStore()
+
   const { user } = storeToRefs(userStore)
+  const { storageEntity } = storeToRefs(storageStore)
+  const { folderEntity } = storeToRefs(folderStore)
 
   const files = ref<IFile[]>([])
   const fileIds = ref<number[]>([])
@@ -69,6 +80,16 @@
 
   const isMenuShowed = ref(false)
   const isAddFolderDialogVisible = ref(false)
+
+  const url = computed((): string => {
+    const folderId = +route.params.folderId
+
+    const _url = folderId ?
+      `${baseURL}/folders/${folderId}/add-file` :
+      `${baseURL}/storage/add-file`
+
+    return _url
+  })
 
   const menu = computed((): IBaseActionListItem[] => {
     return [
@@ -80,17 +101,14 @@
     ]
   })
 
-  const fetchData = async () => {
-    try {
-      await storageStore.fetchStorage()
-    } catch (error: any) {
-      notifyError(error)
-    }
-  }
+  const handleAddFile = (entities: (IDiskEntity | IFile)[]) => {
+    const folderId = +route.params.folderId
 
-  const handleAddFile = async () => {
-    console.log('work')
-    await fetchData()
+    entities.forEach(entity => {
+      folderId ? folderEntity.value = entity as IDiskEntity :
+      storageEntity.value = entity as IDiskEntity
+    })
+
     isMenuShowed.value = false
   }
 
@@ -105,15 +123,25 @@
 
     if (valid) {
       try {
-        const form = addFolderDialogValue.getValues()
-        await folderStore.createFolder(form)
+        const folderId = +route.params.folderId
+        const form: ICreateFolderBody = addFolderDialogValue.getValues()
+
+        if (folderId) {
+          await folderStore.addFolder(folderId, form)
+        } else {
+          await storageStore.addFolder(form)
+        }
+
+        notifySuccess('Папка добавлена в хранилище')
+      } catch (error) {
+        notifyError(error)
+      } finally {
         isAddFolderDialogVisible.value = false
         isMenuShowed.value = false
-        notifySuccess('Папка добавлена в хранилище')
-        await fetchData()
-      } catch(error) {
-        notifyError(error)
       }
+
+    } else {
+      notifyError('Проверьте правильность введенных данных')
     }
   }
 </script>

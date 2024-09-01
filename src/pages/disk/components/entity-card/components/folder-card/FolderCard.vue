@@ -16,7 +16,7 @@
 
       <BaseButtonWithActionMenu
         width="250px"
-        :menu="diskFolderMenu"
+        :menu="folderCardMenu"
       />
 
     </div>
@@ -32,9 +32,10 @@
     </p>
 
     <BaseActionMenu
+      auto-close
       context-menu
       touch-position
-      :menu="diskFolderMenu"
+      :menu="folderCardMenu"
     />
   </div>
 </template>
@@ -46,28 +47,57 @@
 
   //Types
   import { IFolder } from 'src/stores/types/folder'
+  import { IDiskEntity } from 'src/stores/types/disk-entity'
+  import { IBaseActionListItem } from 'src/components/_uikit/other/BaseActionList.vue'
+
+  //Store
+  import { useFolderStore } from 'src/stores/modules/folder.store'
+  import { useStorageStore } from 'src/stores/modules/storage.store'
+
+  //Hooks
+  import useNotify from 'src/utils/hooks/useNotify'
 
   //Utils
   import { format } from 'date-fns'
   import { ru } from 'date-fns/locale'
-  import { diskFolderMenu } from './model/disk-folder-menu'
 
   interface Props {
-    folder: IFolder
+    folderEntity: IDiskEntity
   }
+
+  const folder = computed(() => {
+    return props.folderEntity.entity as IFolder
+  })
+
+  const router = useRouter()
+  const { notifyError, notifySuccess } = useNotify()
+  const folderStore = useFolderStore()
+  const storageStore = useStorageStore()
 
   const props = defineProps<Props>()
 
-  const router = useRouter()
-
   const formatedDate = computed(() => {
-    const { createdAt } = props.folder
+    const { createdAt } = folder.value
 
     return format(createdAt, 'dd MMM yyyy', { locale: ru })
   })
 
+  const folderCardMenu = computed((): IBaseActionListItem[] => {
+    return [
+      { title: 'Скачать', icon: 'mdi-download' },
+      { title: 'Переименовать', icon: 'mdi-folder-edit' },
+      { title: 'Поделиться', icon: 'mdi-share' },
+      { title: 'Добавить в избранное', icon: 'mdi-star' },
+      // {
+      //   title: 'Добавить в корзину',
+      //   icon: 'mdi-trash-can',
+      //   callback: handleDeleteFolder,
+      // },
+    ]
+  })
+
   const goToFolder = () => {
-    const { id } = props.folder
+    const { id } = props.folderEntity
 
     router.push({
       name: 'disk.storage.folder',
@@ -106,6 +136,10 @@
         column-gap: 8px;
 
         &-text {
+          max-width: 150px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
           font-size: 1.4rem;
           font-family: Nunito, sans-serif;
           font-weight: 500;

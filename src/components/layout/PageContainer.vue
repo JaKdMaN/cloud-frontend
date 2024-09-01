@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
   //Types
-  import { IBaseBreadcrumbsItem } from '../_uikit/other/BaseBreadCrumbs.vue'
+  import { IBaseBreadcrumbsItem } from 'src/components/_uikit/other/BaseBreadcrumbs.vue'
 
   interface Props {
     title?: string

@@ -11,12 +11,10 @@ export interface IFolder {
 
 export interface ICreateFolderBody {
   name: string
-  parentFolderId?: number
 }
 
 export interface IUpdateFolderBody {
   name: string
-  parentFolderId?: number
 }
 
 export interface IAddEntitiesFolder {

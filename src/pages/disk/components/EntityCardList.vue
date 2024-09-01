@@ -10,10 +10,10 @@
 
 <script setup lang="ts">
   //Types
-  import { IStorageEntity } from 'src/stores/types/storage'
+  import { IDiskEntity } from 'src/stores/types/disk-entity/index'
 
   interface Props {
-    list: IStorageEntity[]
+    list: IDiskEntity[]
   }
 
   defineProps<Props>()
@@ -23,6 +23,6 @@
   .entity-card-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 24px;
+    gap: 16px;
   }
 </style>
