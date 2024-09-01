@@ -30,6 +30,7 @@
 
   //Types
   import { IFile } from 'src/stores/types/file'
+  import { IDiskEntity } from 'src/stores/types/disk-entity'
   import { AxiosHeaders } from 'axios'
 
   //Hooks
@@ -54,15 +55,16 @@
   interface Props {
     title: string
     icon?: string
-    files: IFile[]
+    files: IFile[] | IDiskEntity[]
     fileIds: number[]
     accept?: string
     disabled?: boolean
     maxFiles?: number
+    url?: string
   }
 
   interface Emits {
-    (e: 'update:files', value: IFile[]): void
+    (e: 'update:files', value: (IFile | IDiskEntity)[]): void
     (e: 'update:fileIds', value: number[]): void
   }
 
@@ -132,7 +134,7 @@
     }
   }
 
-  const updateData = (file: IFile) => {
+  const updateData = (file: IFile | IDiskEntity) => {
     if (file) {
       const files = isSingleMode.value ? [ file ] : [ ...props.files, file ]
       const fileIds = files.map(f => f.id)
@@ -166,7 +168,7 @@
   }
 
   const fetchFile = async (formData: FormData): Promise<any> => {
-    const url = `${baseURL}/file/upload`
+    const url = props.url ?? `${baseURL}/file/upload`
     const controller = new AbortController()
     const id = Date.now().toString(36)
 

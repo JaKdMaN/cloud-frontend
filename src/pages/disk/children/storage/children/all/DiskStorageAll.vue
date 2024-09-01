@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
   //Core
-  import { ref } from 'vue'
+  import { ref, watch } from 'vue'
   import { storeToRefs } from 'pinia'
 
   //Store
@@ -31,7 +31,7 @@
 
   const { notifyError } = useNotify()
   const storageStore = useStorageStore()
-  const { storage } = storeToRefs(storageStore)
+  const { storage, storageEntity } = storeToRefs(storageStore)
 
   const search = ref('')
 
@@ -44,6 +44,8 @@
   }
 
   fetchData()
+
+  watch(storageEntity, fetchData)
 </script>
 
 <style scoped lang="scss">

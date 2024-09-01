@@ -4,6 +4,7 @@
     title="Добавить папку"
     button-confirm-text="Добавить"
     :visible="visible"
+    :width="512"
     @close="emit('update:visible', false)"
     @cancel="emit('update:visible', false)"
     @submit="emit('submit')"
@@ -11,6 +12,7 @@
     <BaseInputWithValidation
       name="name"
       placeholder="Введите название папки"
+      @keyup.enter="emit('submit')"
     />
   </DialogWrapper>
 </template>

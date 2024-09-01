@@ -33,7 +33,7 @@
 <style scoped lang="scss">
   .base-breadcrumbs {
     display: flex;
-    column-gap: 24px;
+    column-gap: 6px;
 
     &__item {
       display: flex;
